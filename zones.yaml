@@ -1,0 +1,37 @@
+- name: Granxa
+  latitude: !secret lat_granxa
+  longitude: !secret lon_granxa
+  radius: 150
+  icon: mdi:cat
+
+- name: Galeira 
+  latitude: !secret lat_galeira
+  longitude: !secret lon_galeira
+  radius: 75
+  icon: mdi:worker
+
+- name: Piscina
+  latitude: !secret lat_piscina
+  longitude: !secret lon_piscina
+  radius: 75
+  icon: mdi:pool
+
+- name: Oficina
+  latitude: !secret lat_oficina
+  longitude: !secret lon_oficina
+  radius: 50
+  icon: mdi:worker
+
+- name: Taxi 1
+  latitude: !secret lat_taxi_1
+  longitude: !secret lon_taxi_1
+  radius: 75
+  icon: mdi:hail
+
+- name: Taxi 2
+  latitude: !secret lat_taxi_2
+  longitude: !secret lon_taxi_2
+  radius: 50
+  icon: mdi:hail
+
+

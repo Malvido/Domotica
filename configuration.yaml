@@ -277,6 +277,14 @@ binary_sensor:
     - '2020-03-20'
     - '2020-08-16'
 
+  - platform: "mqtt"
+    state_topic: "zigbee2mqtt/SensorMovemento"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    payload_on: true
+    payload_off: false
+    value_template: "{{ value_json.occupancy }}"
+    device_class: "motion"
+
 # Reprodutor multimedia
 media_player:
   - platform: kodi
@@ -312,6 +320,12 @@ mqtt:
   discovery_prefix: homeassistant
   username: !secret usuarioMQTT
   password: !secret ctrsnlMQTT
+  birth_message:
+    topic: 'hass/status'
+    payload: 'online'
+  will_message:
+    topic: 'hass/status'
+    payload: 'offline'
 
 # Zonas
 
@@ -327,6 +341,24 @@ switch:
     body_on: '{"state": "start"}'
     body_off: '{"state": "stop"}'
     is_on_template: '{{ value_json is not none and value_json.state == "running" }}'
+
+  - platform: mqtt
+    name: "Sonoff01"
+    state_topic: "stat/sonoff01/POWER"
+    command_topic: "cmnd/sonoff01/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+
+  - platform: mqtt
+    name: "sonoff_bano"
+    state_topic: "stat/sonoff_bano/POWER"
+    command_topic: "cmnd/sonoff_bano/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
 
 shell_command:
   restart_hass: 'curl http://192.168.0.23:8126/container/home-assistant/restart'

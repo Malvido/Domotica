@@ -32,18 +32,17 @@
   alias: kodi
   description: ''
   trigger:
-  - at: '19:58'
+  - at: '17:58'
     platform: time
   condition: []
   action:
   - data:
-      data:
-        message: Faltan 2 minutos para aplaudir
-        title: Aviso importante
+      message: Faltan 2 minutos para aplaudir
+      title: Aviso importante
     service: notify.kodi
   - delay: 00:02:00
   - data:
-      message: Xa é horta
+      message: Xa é hora
       tittle: Aviso importante
     service: notify.kodi
   - data: {}
@@ -57,7 +56,7 @@
   alias: Batería
   description: ''
   trigger:
-  - entity_id: sensor.battery_level
+  - entity_id: sensor.lm_g710_battery_level
     from: '99'
     platform: state
     to: '100'
@@ -66,3 +65,58 @@
   - data:
       message: Xa está a batería a tope, podes descargarme
     service: notify.mobile_app_lm_g710
+  - data:
+      message: Xa está a batería a tope, podes descargarme
+      tittle: Para Javi
+    service: notify.tv
+  - data:
+      message: Xa está a batería a tope, podes descargarme
+      tittle: Para Javi
+    service: notify.kodi
+  - timeout: 00:01
+    wait_template: 00:01
+  - data: {}
+    entity_id: switch.0x7cb03eaa0a068261_switch
+    service: switch.turn_off
+- id: '1588421742790'
+  alias: Proba
+  description: ''
+  trigger:
+  - at: '18:47'
+    platform: time
+  condition: []
+  action:
+  - data:
+      message: Vou saír do vídeo!!
+      title: MOMO
+    service: notify.kodi
+  - delay: 00:06:00
+  - data:
+      message: Lévantate do sofá e vai para o baño!
+      title: MOMO
+    service: notify.kodi
+- id: '1588539044807'
+  alias: Luces_banno_azul_ON
+  description: Prende as luces cando se detecta movemento
+  trigger:
+  - entity_id: binary_sensor.0x00158d0003029532_occupancy
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.sonoff_bano
+    service: switch.turn_on
+- id: '1588539177421'
+  alias: Luces_banno_azul_OFF
+  description: Apaga as luces do baño cando deixa de haber movemento
+  trigger:
+  - entity_id: binary_sensor.0x00158d0003029532_occupancy
+    for: 00:00:30
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.sonoff_bano
+    service: switch.turn_off

@@ -288,27 +288,22 @@ binary_sensor:
 # Reprodutor multimedia
 media_player:
   - platform: kodi
-    host: 192.168.0.15
+    host: 192.168.0.10
     name: kodi
     username: !secret kodi
     password: !secret ctrsnlkodi
     port: 8081
 
+# HUE
 
-# Tracker
-
-#device_tracker:
-#  - platform: nmap_tracker
-#    hosts: 192.168.0.1-255
-#    interval_seconds: 10
-#    consider_home: 360
-#    scan_options: " --privileged -sP "
-#    track_new_devices: false
- #   exclude:
-#      -192.168.0.154
- #     -192.168.0.18
-#      -192.168.0.21
- #     -192.168.0.11
+emulated_hue:
+  host_ip: 192.168.0.23
+  listen_port: 80
+  exposed_domains:
+    - light
+    - media_player
+    - switch
+    - climate
 
 # MQTT
 
@@ -332,8 +327,12 @@ mqtt:
 zone: !include zones.yaml
 
 switch:
-
   - platform: orvibo
+#    discovery: false
+#    switches:
+#      - host: 192.168.0.11
+#        mac: !secret TermoMAC
+#        name: "Termo"
 
   - platform: rest
     resource: http://192.168.0.23:8126/container/MQTT
@@ -391,14 +390,14 @@ notify:
 
   - name: kodi
     platform: kodi
-    host: 192.168.0.15
+    host: 192.168.0.10
     username: !secret kodi
     password: !secret ctrsnlkodi
     port: 8081
 
   - platform: nfandroidtv
     name: TV
-    host: 192.168.0.15
+    host: 192.168.0.10
 
 # HACS
 hacs:

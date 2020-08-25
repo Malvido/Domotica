@@ -1,4 +1,3 @@
-
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
@@ -8,249 +7,13 @@ default_config:
 
 #Transporte
 
-sensor:
-
-  - platform: waze_travel_time
-    name: "De casa a Galeira"
-    origin: !secret casa
-    destination: !secret galeira
-    region: 'EU'
-
-  - platform: waze_travel_time
-    name: "De Galeira a Granxa"
-    origin: !secret galeira
-    destination: !secret granxa
-    region: 'EU'
-
-  - platform: waze_travel_time
-    name: "De Galeira a Lepanto"
-    origin: !secret galeira
-    destination: !secret taxi_1
-    region: 'EU'
-
-  - platform: waze_travel_time
-    name: "De Galeira a Sfera"
-    origin: !secret galeira
-    destination: !secret taxi_2
-    region: 'EU'
-
-
-# Metetogalicia
-
-  - platform: jsonrest
-    resource: http://servizos.meteogalicia.gal/rss/observacion/observacionConcellos.action
-    name: meteogaliciatemp
-    scan_interval: 1800
-    
-  - platform: template
-    sensors:
-      temperatura:
-        value_template: '{{ states.sensor.meteogaliciatemp.attributes.listaObservacionConcellos.108.temperatura}}'
-        friendly_name: Temperatura
-        unit_of_measurement: 'ºC'
-      sensaciontermica:
-        value_template: '{{ states.sensor.meteogaliciatemp.attributes.listaObservacionConcellos.108.sensacionTermica}}'
-        friendly_name: Sensación térmica
-        unit_of_measurement: 'ºC'
-
-
-
-  - platform: jsonrest
-    resource: http://servizos.meteogalicia.gal/rss/observacion/ultimosHorariosEstacions.action?idEst=10906
-    name: Meteogalicia
-    scan_interval: 1800
-
-  - platform: template
-    sensors:
-      humidade:
-        value_template: '{{ states.sensor.meteogalicia.attributes.listHorarios.0.listaInstantes.0.listaMedidas.2.valor}}'
-        friendly_name: Humidade relativa
-      precipitacion:
-        value_template: '{{ states.sensor.meteogalicia.attributes.listHorarios.0.listaInstantes.0.listaMedidas.3.valor}}'
-        friendly_name: Precipitacións
-        unit_of_measurement: 'mm'
-      vento:
-        value_template: '{{ states.sensor.meteogalicia.attributes.listHorarios.0.listaInstantes.0.listaMedidas.7.valor}}'
-        friendly_name: Velocidade do vento
-        unit_of_measurement: 'm/s'
-
-
-# Previsión Meteogalicia
-
-  - platform: jsonrest
-    resource: http://servizos.meteogalicia.gal/rss/predicion/jsonPredConcellos.action?idConc=36008&dia=-1&request_locale=gl
-    name: Prevision
-    scan_interval: 1800
-
-  - platform: template
-    sensors:
-      chuvia_hoxe_manha:  
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.0.pchoiva.manha}}'
-        friendly_name: Chuvia hoxe pola mañá
-        unit_of_measurement: '%'
-      chuvia_hoxe_tarde:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.0.pchoiva.tarde}}'
-        friendly_name: Chuvia hoxe pola tarde
-        unit_of_measurement: '%'
-      chuvia_hoxe_noite:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.0.pchoiva.noite}}'
-        friendly_name: Chuvia hoxe pola noite
-        unit_of_measurement: '%'
-      chuvia_manha_manha:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.1.pchoiva.manha}}'
-        friendly_name: Chuvia mañá pola mañá
-        unit_of_measurement: '%'
-      chuvia_manha_tarde:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.1.pchoiva.tarde}}'
-        friendly_name: Chuvia mañá pola tarde
-        unit_of_measurement: '%'
-      chuvia_manha_noite:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.1.pchoiva.noite}}'
-        friendly_name: Chuvia mañá pola noite
-        unit_of_measurement: '%'
-      chuvia_pasodomanha_manha:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.2.pchoiva.manha}}'
-        friendly_name: Chuvia pasado mañá pola mañá
-        unit_of_measurement: '%'
-      chuvia_pasadomanha_tarde:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.2.pchoiva.tarde}}'
-        friendly_name: Chuvia pasado mañá pola tarde
-        unit_of_measurement: '%'
-      chuvia_pasadomanha_noite:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.2.pchoiva.noite}}'
-        friendly_name: Chuvia pasadomañá pola noite
-        unit_of_measurement: '%'
-      chuvia_pasadopasodomanha_manha:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.3.pchoiva.manha}}'
-        friendly_name: Chuvia pasado pasado mañá pola mañá
-        unit_of_measurement: '%'
-      chuvia_pasadopasadomanha_tarde:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.3.pchoiva.tarde}}'
-        friendly_name: Chuvia pasado pasado mañá pola tarde
-        unit_of_measurement: '%'
-      chuvia_pasadopasadomanha_noite:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.3.pchoiva.noite}}'
-        friendly_name: Chuvia pasado pasadomañá pola noite
-        unit_of_measurement: '%'
-      tmin_hoxe:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.0.tMin}}'
-        friendly_name: Temp mínima hoxe
-        unit_of_measurement: 'ºC'
-      tmin_manha:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.1.tMin}}'
-        friendly_name: Temp mínima mañá
-        unit_of_measurement: 'ºC'
-      tmin_pasadomanha:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.2.tMin}}'
-        friendly_name: Temp mínima pasado mañá
-        unit_of_measurement: 'ºC'
-      tmin_pasadopasadomanha:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.3.tMin}}'
-        friendly_name: Temp mínima pasado pasado mañá
-        unit_of_measurement: 'ºC'
-      tmax_hoxe:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.0.tMax}}'
-        friendly_name: Temp máxima hoxe
-        unit_of_measurement: 'ºC'
-      tmax_manha:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.1.tMax}}'
-        friendly_name: Temp máxima mañá
-        unit_of_measurement: 'ºC'
-      tmax_pasadomanha:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.2.tMax}}'
-        friendly_name: Temp máxima pasado mañá
-        unit_of_measurement: 'ºC'
-      tmax_pasadopasadomanha:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.3.tMax}}'
-        friendly_name: Temp máxima pasado pasado mañá
-        unit_of_measurement: 'ºC'
-
-
-# Daas Meteogalicia
-
-  - platform: template
-    sensors:
-      data_hoxe:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.0.dataPredicion}}'
-        friendly_name: Hoxe
-      data_manha:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.1.dataPredicion}}'
-        friendly_name: Mañá
-      data_pasadomanha:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.2.dataPredicion}}'
-        friendly_name: Pasado mañá
-      data_pasadopasadomanha:
-        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.3.dataPredicion}}'
-        friendly_name: Pasado pasado mañá
- 
-# Termostato calefacción
-
-  - platform: template
-    sensors:
-      calefaccion_modo:  #el modo puede ser off , heat o auto
-        friendly_name: calefaccion_modo
-        value_template: "{{ states.climate.termostato_comedor.attributes.operation_mode }}"
-      calefaccion_activa:  # 1 si está la orden de funcionar a la caldera
-        friendly_name: calefaccion_activa
-        value_template: "{{ states.climate.termostato_comedor.attributes.heating_active }}"     
-      calefaccion_temperatura:  # Temperatura actual de la  habitacion del termostato
-        friendly_name: calefaccion_temperatura
-        value_template: "{{ states.climate.termostato_comedor.attributes.current_temperature | float }}"                 
-      calefaccion_setpoint:  # Setpoint a la temperatura que quedamos alcanzar
-        friendly_name: calefaccion_setpoint
-        value_template: "{{ states.climate.termostato_comedor.attributes.temperature | float }}"   
-        
-  - platform: history_stats
-    name: calefaccion_activa_hoy
-    entity_id:  sensor.calefaccion_activa
-    state: 1
-    type: time
-    start: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
-    end: '{{ now() }}'    
-    
-  - platform: history_stats
-    name:  calefaccion_activa_ayer
-    entity_id:  sensor.calefaccion_activa
-    state: 1
-    type: time
-    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
-    duration:
-        hours: 24   
-
-  - platform: history_stats
-    name:  calefaccion_activa_semana
-    entity_id:  sensor.calefaccion_activa
-    state: 1
-    type: time
-    start: '{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}'
-    end: '{{ now() }}'    
-
-  - platform: history_stats
-    name:  calefaccion_activa_mes
-    entity_id:  switch.comedor
-    state: 'on'
-    type: time
-    start: '{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().day * 86400 }}'
-    end: '{{ now() }}'
-
-# Correo
-
-  - platform: imap
-    name: Caixa de entrada
-    server: !secret svrmeumail
-    username: !secret meumail
-    password: !secret ctrsnlmail
-
-# Fai2bain
-  - platform: fail2ban
-    jails:
-      - ssh
-      - hass-iptables
+sensor: !include_dir_merge_list sensors/
 
 logger:
   default: critical
   logs:
     homeassistant.components.http.ban: warning
+
 # Camaras
 
 camera:
@@ -272,7 +35,7 @@ climate:
 binary_sensor:
   - platform: workday
     country: ES
-    province: GAL
+    province: GA
     add_holidays:
     - '2020-03-20'
     - '2020-08-16'
@@ -285,7 +48,16 @@ binary_sensor:
     value_template: "{{ value_json.occupancy }}"
     device_class: "motion"
 
+  - platform: "mqtt"
+    state_topic: "zigbee2mqtt/MovementoBannoAzul"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    payload_on: true
+    payload_off: false
+    value_template: "{{ value_json.occupancy }}"
+    device_class: "motion"
+
 # Reprodutor multimedia
+
 media_player:
   - platform: kodi
     host: 192.168.0.10
@@ -342,18 +114,18 @@ switch:
     is_on_template: '{{ value_json is not none and value_json.state == "running" }}'
 
   - platform: mqtt
-    name: "Sonoff01"
-    state_topic: "stat/sonoff01/POWER"
-    command_topic: "cmnd/sonoff01/POWER"
+    name: "Luz_banno_azul"
+    state_topic: "stat/Sonoff_banno_azul/POWER"
+    command_topic: "cmnd/Sonoff_banno_azul/POWER"
     qos: 1
     payload_on: "ON"
     payload_off: "OFF"
     retain: true
 
   - platform: mqtt
-    name: "sonoff_bano"
-    state_topic: "stat/sonoff_bano/POWER"
-    command_topic: "cmnd/sonoff_bano/POWER"
+    name: "Luz_banno_marron"
+    state_topic: "stat/Sonoff_banno_marron/POWER"
+    command_topic: "cmnd/Sonoff_banno_marron/POWER"
     qos: 1
     payload_on: "ON"
     payload_off: "OFF"

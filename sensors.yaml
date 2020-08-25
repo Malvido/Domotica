@@ -1,0 +1,252 @@
+- id: '1578943476911'
+  alias: Termo
+  description: ''
+  trigger:
+  - at: 00:30
+    platform: time
+  condition: []
+  action:
+  - entity_id: switch.unnamed_device
+    service: switch.turn_on
+  - delay: '10:00'
+  - entity_id: switch.unnamed_device
+    service: switch.turn_off
+- id: '1581423441740'
+  alias: Caixa de correo
+  description: ''
+  trigger:
+  - entity_id: sensor.caixa_de_entrada
+    from: '0'
+    platform: state
+    to: '1'
+  condition:
+  - after: 08:30
+    before: '23:45'
+    condition: time
+  action:
+  - data:
+      message: Consulta a caixa de correo, tés unha nova mensaxe.
+      title: Novo correo electrónico
+    service: notify.mobile_app_lg_mobil
+  - data:
+      data:
+        url: https://image.freepik.com/free-vector/green-mailbox-background-with-envelopes_23-2147606222.jpg
+      message: Comproba a caixa de correo, recibiches un mail
+      title: Novo mail
+    service: notify.jabberjavi
+- id: '1582584926447'
+  alias: kodi
+  description: ''
+  trigger:
+  - at: '17:58'
+    platform: time
+  condition: []
+  action:
+  - data:
+      message: Faltan 2 minutos para aplaudir
+      title: Aviso importante
+    service: notify.kodi
+  - delay: 00:02:00
+  - data:
+      message: Xa é hora
+      tittle: Aviso importante
+    service: notify.kodi
+  - data: {}
+    entity_id: media_player.kodi
+    service: media_player.media_pause
+  - delay: 00:02:00
+  - data: {}
+    entity_id: media_player.kodi
+    service: media_player.media_play
+- id: '1585249766053'
+  alias: Batería
+  description: ''
+  trigger:
+  - entity_id: sensor.lg_mobil_battery_level
+    platform: state
+    to: '100'
+  condition: []
+  action:
+  - data:
+      message: Xa está a batería a tope, podes descargarme
+    service: notify.mobile_app_lg_mobil
+  - data:
+      message: Xa está a batería a tope, podes descargarme
+      tittle: Para Javi
+    service: notify.tv
+  - data:
+      message: Xa está a batería a tope, podes descargarme
+      tittle: Para Javi
+    service: notify.kodi
+  - timeout: 00:01
+    wait_template: 00:01
+  - data: {}
+    entity_id: switch.0x7cb03eaa0a068261_switch
+    service: switch.turn_off
+  - data:
+      data:
+        url: https://image.freepik.com/free-vector/neon-battery-with-zipper-stand-glows-dark_75817-69.jpg
+      message: Xa está a batería a tope, podes desenchufarme
+      title: Estado da batería
+    service: notify.jabberjavi
+- id: '1588421742790'
+  alias: Proba
+  description: ''
+  trigger:
+  - at: '18:47'
+    platform: time
+  condition: []
+  action:
+  - data:
+      message: Vou saír do vídeo!!
+      title: MOMO
+    service: notify.kodi
+  - delay: 00:06:00
+  - data:
+      message: Lévantate do sofá e vai para o baño!
+      title: MOMO
+    service: notify.kodi
+- id: '1588539044807'
+  alias: Luces_banno_azul_ON
+  description: Prende as luces cando se detecta movemento
+  trigger:
+  - entity_id: binary_sensor.0x00158d0003029532_occupancy
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.luz_banno_azul
+    service: switch.turn_on
+- id: '1588539177421'
+  alias: Luces_banno_azul_OFF
+  description: Apaga as luces do baño cando deixa de haber movemento
+  trigger:
+  - entity_id: binary_sensor.0x00158d0003029532_occupancy
+    for: 00:00:30
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.luz_banno_azul
+    service: switch.turn_off
+- id: '1591688444503'
+  alias: Enchufe lámpada nocturna
+  description: ''
+  trigger:
+  - entity_id: switch.0x7cb03eaa0a068261_switch
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - after: '23:23'
+    before: 07:00
+    condition: time
+  action:
+  - delay: 00:20:00
+  - device_id: ad610ee0f04b4c4c8a5cd93fee2ea6c1
+    domain: switch
+    entity_id: switch.0x7cb03eaa0a068261_switch
+    type: turn_off
+- id: '1591865148190'
+  alias: aviso
+  description: ''
+  trigger:
+  - at: 09:15
+    platform: time
+  condition: []
+  action:
+  - data:
+      message: É hora de traballar!
+      tittle: Aviso importante
+    service: notify.tv
+- id: '1592133815451'
+  alias: Aviso de luces
+  description: Avisa cando están as luces prendidas cando javier está fóra de casa
+  trigger:
+  - entity_id: person.javier
+    event: leave
+    platform: zone
+    zone: zone.home
+  condition:
+  - condition: state
+    entity_id: switch.luz_banno_azul
+    state: 'on'
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: switch.luz_banno_marron
+      state: 'on'
+  action:
+  - data:
+      data:
+        url: https://img.freepik.com/free-vector/light-switch-design_25030-4226.jpg?size=338&ext=jpg
+      message: As luces do baño azul están {{ states("switch.luz_banno_azul")  }}
+        e as do baño marrón están {{ states("switch.luz_banno_azul")  }}. Por favor,
+        polo ben do planeta, apágaas. Grazas
+      title: Luces prendidas
+    service: notify.jabberjavi
+- id: '1592339892866'
+  alias: Luces_banno_marron_OFF
+  description: Apaga as luces do baño cando deixa de haber movemento
+  trigger:
+  - device_id: 18e2e24068d84038989ac9cc16462840
+    domain: binary_sensor
+    entity_id: binary_sensor.0x00158d0003029532_occupancy
+    for:
+      hours: 0
+      minutes: 6
+      seconds: 30
+    platform: device
+    type: no_motion
+  condition:
+  - after: '23:30'
+    before: 06:00
+    condition: time
+  action:
+  - data: {}
+    entity_id: switch.luz_banno_marron
+    service: switch.turn_off
+- id: '1592339980119'
+  alias: Luces_banno_marron_ON
+  description: Prende as luces cando se detecta movemento
+  trigger:
+  - device_id: 18e2e24068d84038989ac9cc16462840
+    domain: binary_sensor
+    entity_id: binary_sensor.0x00158d0003029532_occupancy
+    platform: device
+    type: motion
+  condition:
+  - after: '23:30'
+    before: '20:00'
+    condition: time
+  action:
+  - data: {}
+    entity_id: switch.luz_banno_marron
+    service: switch.turn_on
+- id: '1592646476575'
+  alias: termo sabado
+  description: ''
+  trigger:
+  - entity_id: switch.unnamed_device
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - after: 09:00
+    before: '13:00'
+    condition: time
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'off'
+  action:
+  - delay: 00:59:00
+  - data: {}
+    entity_id: switch.unnamed_device
+    service: switch.turn_off
+  - data:
+      message: termo apagado!
+    service: notify.jabberjavi

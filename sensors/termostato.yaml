@@ -1,0 +1,49 @@
+# Termostato calefacción
+
+#  - platform: template
+#    sensors:
+#      calefaccion_modo:  #el modo puede ser off , heat o auto
+#        friendly_name: calefaccion_modo
+#        value_template: "{{ states.climate.termostato_comedor.attributes.operation_mode }}"
+#      calefaccion_activa:  # 1 si está la orden de funcionar a la caldera
+#        friendly_name: calefaccion_activa
+#        value_template: "{{ states.climate.termostato_comedor.attributes.heating_active }}"     
+#      calefaccion_temperatura:  # Temperatura actual de la  habitacion del termostato
+#        friendly_name: calefaccion_temperatura
+#        value_template: "{{ states.climate.termostato_comedor.attributes.current_temperature | float }}"                 
+#      calefaccion_setpoint:  # Setpoint a la temperatura que quedamos alcanzar
+#        friendly_name: calefaccion_setpoint
+#        value_template: "{{ states.climate.termostato_comedor.attributes.temperature | float }}"   
+        
+#  - platform: history_stats
+#    name: calefaccion_activa_hoy
+#    entity_id:  sensor.calefaccion_activa
+#    state: 1
+#    type: time
+#    start: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+#    end: '{{ now() }}'    
+    
+#  - platform: history_stats
+#    name:  calefaccion_activa_ayer
+#    entity_id:  sensor.calefaccion_activa
+#    state: 1
+#    type: time
+#    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+#    duration:
+#        hours: 24   
+#
+#  - platform: history_stats
+#    name:  calefaccion_activa_semana
+#    entity_id:  sensor.calefaccion_activa
+#    state: 1
+#    type: time
+#    start: '{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}'
+ #   end: '{{ now() }}'    
+#
+#  - platform: history_stats
+#    name:  calefaccion_activa_mes
+#    entity_id:  switch.comedor
+#    state: 'on'
+#    type: time
+#    start: '{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().day * 86400 }}'
+#    end: '{{ now() }}'

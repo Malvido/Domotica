@@ -1,0 +1,147 @@
+# Metetogalicia
+
+  - platform: jsonrest
+    resource: http://servizos.meteogalicia.gal/rss/observacion/observacionConcellos.action
+    name: meteogaliciatemp
+    scan_interval: 1800
+    
+  - platform: template
+    sensors:
+      temperatura:
+        value_template: '{{ states.sensor.meteogaliciatemp.attributes.listaObservacionConcellos.108.temperatura}}'
+        friendly_name: Temperatura
+        unit_of_measurement: 'ºC'
+      sensaciontermica:
+        value_template: '{{ states.sensor.meteogaliciatemp.attributes.listaObservacionConcellos.108.sensacionTermica}}'
+        friendly_name: Sensación térmica
+        unit_of_measurement: 'ºC'
+
+
+
+  - platform: jsonrest
+    resource: http://servizos.meteogalicia.gal/rss/observacion/ultimosHorariosEstacions.action?idEst=10906
+    name: Meteogalicia
+    scan_interval: 1800
+
+  - platform: template
+    sensors:
+      humidade:
+        value_template: '{{ states.sensor.meteogalicia.attributes.listHorarios.0.listaInstantes.0.listaMedidas.2.valor}}'
+        friendly_name: Humidade relativa
+      precipitacion:
+        value_template: '{{ states.sensor.meteogalicia.attributes.listHorarios.0.listaInstantes.0.listaMedidas.3.valor}}'
+        friendly_name: Precipitacións
+        unit_of_measurement: 'mm'
+      vento:
+        value_template: '{{ states.sensor.meteogalicia.attributes.listHorarios.0.listaInstantes.0.listaMedidas.7.valor}}'
+        friendly_name: Velocidade do vento
+        unit_of_measurement: 'm/s'
+
+
+# Previsión Meteogalicia
+
+  - platform: jsonrest
+    resource: http://servizos.meteogalicia.gal/rss/predicion/jsonPredConcellos.action?idConc=36008&dia=-1&request_locale=gl
+    name: Prevision
+    scan_interval: 1800
+
+  - platform: template
+    sensors:
+      chuvia_hoxe_manha:  
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.0.pchoiva.manha}}'
+        friendly_name: Chuvia hoxe pola mañá
+        unit_of_measurement: '%'
+      chuvia_hoxe_tarde:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.0.pchoiva.tarde}}'
+        friendly_name: Chuvia hoxe pola tarde
+        unit_of_measurement: '%'
+      chuvia_hoxe_noite:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.0.pchoiva.noite}}'
+        friendly_name: Chuvia hoxe pola noite
+        unit_of_measurement: '%'
+      chuvia_manha_manha:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.1.pchoiva.manha}}'
+        friendly_name: Chuvia mañá pola mañá
+        unit_of_measurement: '%'
+      chuvia_manha_tarde:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.1.pchoiva.tarde}}'
+        friendly_name: Chuvia mañá pola tarde
+        unit_of_measurement: '%'
+      chuvia_manha_noite:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.1.pchoiva.noite}}'
+        friendly_name: Chuvia mañá pola noite
+        unit_of_measurement: '%'
+      chuvia_pasodomanha_manha:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.2.pchoiva.manha}}'
+        friendly_name: Chuvia pasado mañá pola mañá
+        unit_of_measurement: '%'
+      chuvia_pasadomanha_tarde:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.2.pchoiva.tarde}}'
+        friendly_name: Chuvia pasado mañá pola tarde
+        unit_of_measurement: '%'
+      chuvia_pasadomanha_noite:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.2.pchoiva.noite}}'
+        friendly_name: Chuvia pasadomañá pola noite
+        unit_of_measurement: '%'
+      chuvia_pasadopasodomanha_manha:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.3.pchoiva.manha}}'
+        friendly_name: Chuvia pasado pasado mañá pola mañá
+        unit_of_measurement: '%'
+      chuvia_pasadopasadomanha_tarde:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.3.pchoiva.tarde}}'
+        friendly_name: Chuvia pasado pasado mañá pola tarde
+        unit_of_measurement: '%'
+      chuvia_pasadopasadomanha_noite:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.3.pchoiva.noite}}'
+        friendly_name: Chuvia pasado pasadomañá pola noite
+        unit_of_measurement: '%'
+      tmin_hoxe:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.0.tMin}}'
+        friendly_name: Temp mínima hoxe
+        unit_of_measurement: 'ºC'
+      tmin_manha:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.1.tMin}}'
+        friendly_name: Temp mínima mañá
+        unit_of_measurement: 'ºC'
+      tmin_pasadomanha:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.2.tMin}}'
+        friendly_name: Temp mínima pasado mañá
+        unit_of_measurement: 'ºC'
+      tmin_pasadopasadomanha:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.3.tMin}}'
+        friendly_name: Temp mínima pasado pasado mañá
+        unit_of_measurement: 'ºC'
+      tmax_hoxe:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.0.tMax}}'
+        friendly_name: Temp máxima hoxe
+        unit_of_measurement: 'ºC'
+      tmax_manha:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.1.tMax}}'
+        friendly_name: Temp máxima mañá
+        unit_of_measurement: 'ºC'
+      tmax_pasadomanha:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.2.tMax}}'
+        friendly_name: Temp máxima pasado mañá
+        unit_of_measurement: 'ºC'
+      tmax_pasadopasadomanha:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.3.tMax}}'
+        friendly_name: Temp máxima pasado pasado mañá
+        unit_of_measurement: 'ºC'
+
+
+# Daas Meteogalicia
+
+  - platform: template
+    sensors:
+      data_hoxe:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.0.dataPredicion}}'
+        friendly_name: Hoxe
+      data_manha:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.1.dataPredicion}}'
+        friendly_name: Mañá
+      data_pasadomanha:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.2.dataPredicion}}'
+        friendly_name: Pasado mañá
+      data_pasadopasadomanha:
+        value_template: '{{ states.sensor.prevision.attributes.predConcello.listaPredDiaConcello.3.dataPredicion}}'
+        friendly_name: Pasado pasado mañá

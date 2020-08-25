@@ -1,0 +1,7 @@
+# Correo
+
+  - platform: imap
+    name: Caixa de entrada
+    server: !secret svrmeumail
+    username: !secret meumail
+    password: !secret ctrsnlmail

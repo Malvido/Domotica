@@ -1,0 +1,8 @@
+# Datos da máquina
+  - platform: systemmonitor
+    resources:
+      - type: processor_use
+      - type: disk_use_percent
+        arg: /home
+      - type: memory_free
+      

@@ -1,0 +1,23 @@
+  - platform: waze_travel_time
+    name: "De casa a Galeira"
+    origin: !secret casa
+    destination: !secret galeira
+    region: 'EU'
+
+  - platform: waze_travel_time
+    name: "De Galeira a Granxa"
+    origin: !secret galeira
+    destination: !secret granxa
+    region: 'EU'
+
+  - platform: waze_travel_time
+    name: "De Galeira a Lepanto"
+    origin: !secret galeira
+    destination: !secret taxi_1
+    region: 'EU'
+
+  - platform: waze_travel_time
+    name: "De Galeira a Sfera"
+    origin: !secret galeira
+    destination: !secret taxi_2
+    region: 'EU'

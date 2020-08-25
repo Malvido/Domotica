@@ -8,3 +8,5 @@ secrets.yaml
 known_devices.yaml
 /custom_components/alexa_media/
 /tts
+/tmp
+
